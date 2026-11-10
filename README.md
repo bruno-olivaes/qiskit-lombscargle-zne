@@ -1,6 +1,7 @@
 # qiskit-lombscargle-zne: Spectral Diagnostic & Pre-Registered ZNE / Pauli Twirling Benchmark Suite (v2.0)
 
 [![Qiskit](https://img.shields.io/badge/Qiskit-2.5+-6133BD.svg)](https://qiskit.org/)
+[![Paper PDF](https://img.shields.io/badge/Paper-PDF_Manuscript-red.svg)](manuscript/main.pdf)
 [![Aer](https://img.shields.io/badge/Qiskit_Aer-0.17+-blue.svg)](https://qiskit.github.io/qiskit-aer/)
 [![Tests](https://img.shields.io/badge/Pytest-5%2F5_Passed-brightgreen.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
