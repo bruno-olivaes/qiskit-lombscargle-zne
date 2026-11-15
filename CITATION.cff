@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this software or manuscript, please cite it as below."
+title: "When Harmonic ZNE Fails: A Comparative Benchmark of Error Mitigation on NISQ Devices"
+type: software
+authors:
+  - given-names: "Bruno Luçardo"
+    family-names: "Olivaes"
+    orcid: "https://orcid.org/0009-0003-5351-446X"
+repository-code: "https://github.com/bruno-olivaes/qiskit-lombscargle-zne"
+url: "https://bruno-olivaes.github.io"
+license: MIT
+version: "1.0.0"
+doi: "10.5281/zenodo.24121693"
+date-released: "2026-11-12"
+keywords:
+  - quantum error mitigation
+  - zero-noise extrapolation
+  - pauli twirling
+  - qiskit
+  - nisq
+
