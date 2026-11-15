@@ -5,18 +5,20 @@ Title: When Harmonic ZNE Fails: A Comparative Benchmark of Error Mitigation on N
 Author: Bruno Lucardo Olivaes
 Primary Category: quant-ph
 Cross-list: physics.comp-ph
+DOI: 10.5281/zenodo.24121693
 
 Package Contents:
 - main.tex: Self-contained LaTeX document source.
-- main.pdf: Pre-compiled reference PDF (4 pages, two-column).
+- main.pdf: Pre-compiled reference PDF (5 pages, two-column).
 - fig_fair_zne_comparison.png: Figure 1 graphic file.
 - refs.bib: BibTeX reference source.
 - 00README.txt: Submission and compilation instructions.
 
 Compilation Instructions:
 pdflatex main.tex
+bibtex main
+pdflatex main.tex
 pdflatex main.tex
 
 Notes:
 - Standard LaTeX packages used: amsmath, amssymb, geometry, graphicx, booktabs, hyperref.
-- Self-contained file referencing embedded bibliography and local figure.
