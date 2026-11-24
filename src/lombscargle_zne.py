@@ -87,12 +87,47 @@ class LombScargleZNE:
 
         return angular_freqs, norm_pgram, max_z, fap
 
+    @staticmethod
+    def _fit_diagnostics(
+        popt: np.ndarray,
+        pcov: np.ndarray,
+        lower_bounds: List[float],
+        upper_bounds: List[float],
+        bound_frac: float = 0.02,
+    ) -> Dict[str, Union[bool, float]]:
+        """Compute bound-saturation and covariance-conditioning diagnostics for curve_fit."""
+        at_bounds = False
+        for p, lo, hi in zip(popt, lower_bounds, upper_bounds):
+            span = hi - lo
+            upper_hit = (hi - p) <= bound_frac * span
+            # Zero lower bounds enforce physical non-negativity (gamma >= 0); flag active clamping.
+            lower_tol = 1e-4 if lo == 0.0 else bound_frac * span
+            lower_hit = (p - lo) <= lower_tol
+            if upper_hit or lower_hit:
+                at_bounds = True
+                break
+
+        if pcov is None or not np.all(np.isfinite(pcov)):
+            cond_number = float('inf')
+        else:
+            try:
+                cond_number = float(np.linalg.cond(pcov))
+            except Exception:
+                cond_number = float('inf')
+
+        unstable_fit = bool(at_bounds or cond_number > 1e4 or not np.isfinite(cond_number))
+        return {
+            'at_bounds': at_bounds,
+            'cond_number': cond_number,
+            'unstable_fit': unstable_fit,
+        }
+
     def extrapolate(
         self,
         scale_factors: Union[List[float], np.ndarray],
         values: Union[List[float], np.ndarray],
         method: str = 'auto'
-    ) -> Dict[str, Union[float, str, np.ndarray]]:
+    ) -> Dict[str, Union[bool, float, str, np.ndarray]]:
         x = np.asarray(scale_factors, dtype=np.float64)
         y = np.asarray(values, dtype=np.float64)
 
@@ -102,37 +137,54 @@ class LombScargleZNE:
         def damped_osc(s, e0, gamma, omega, phi):
             return e0 * np.exp(-gamma * s) * np.cos(omega * s + phi)
 
-        if method == 'damped_oscillator' or (method == 'auto' and fap < self.fap_threshold):
+        # For small ZNE grids (N <= 12), Scargle's asymptotic FAP has a hard mathematical floor >= ~0.14;
+        # use the fraction of detrended variance explained (r2_peak = 2*max_z/N >= 0.60) alongside FAP.
+        r2_peak = float(np.clip(2.0 * max_z / max(len(x), 1), 0.0, 1.0))
+        spectral_trigger = (fap < self.fap_threshold) or (len(x) <= 12 and r2_peak >= 0.60)
+
+        if method == 'damped_oscillator' or (method == 'auto' and spectral_trigger):
+            osc_lower = [-2.0, 0.0, 0.01, -0.35]
+            osc_upper = [2.0, 1.5, 3.0, 0.35]
             try:
                 e0_guess = float(y[0]) if abs(y[0]) > 0.05 else 1.0
                 # At s -> 0, coherent over-rotation vanishes, so phase offset |phi| at s=0 is small
-                popt, _ = curve_fit(
+                popt, pcov = curve_fit(
                     damped_osc, x, y,
                     p0=[e0_guess, 0.08, dom_freq, 0.0],
-                    bounds=([-2.0, 0.0, 0.01, -0.35], [2.0, 1.5, 3.0, 0.35]),
+                    bounds=(osc_lower, osc_upper),
                     maxfev=5000
                 )
-                e0_fit, gamma_fit, omega_fit, phi_fit = popt
-                zero_noise_val = float(e0_fit * np.cos(phi_fit))
-                return {
-                    'zero_noise_value': zero_noise_val,
-                    'model_type': 'damped_oscillator',
-                    'fap': float(fap),
-                    'dominant_freq': float(omega_fit),
-                    'gamma': float(gamma_fit),
-                    'params': popt,
-                    'scale_factors': x,
-                    'values': y
-                }
+                diag = self._fit_diagnostics(popt, pcov, osc_lower, osc_upper)
+                # Explicit method='damped_oscillator' returns the fit with diagnostics;
+                # method='auto' accepts the harmonic model only if statistically and numerically stable.
+                if method == 'damped_oscillator' or not diag['unstable_fit']:
+                    e0_fit, gamma_fit, omega_fit, phi_fit = popt
+                    zero_noise_val = float(e0_fit * np.cos(phi_fit))
+                    return {
+                        'zero_noise_value': zero_noise_val,
+                        'model_type': 'damped_oscillator',
+                        'fap': float(fap),
+                        'dominant_freq': float(omega_fit),
+                        'gamma': float(gamma_fit),
+                        'params': popt,
+                        'scale_factors': x,
+                        'values': y,
+                        **diag,
+                    }
             except Exception:
                 pass
 
         if method == 'exponential':
+            exp_lower = [-2.0, 0.0]
+            exp_upper = [2.0, 2.0]
             try:
                 def exp_model(s, a, b):
                     return a * np.exp(-b * s)
                 a0 = float(y[0]) if abs(y[0]) > 0.05 else 1.0
-                popt, _ = curve_fit(exp_model, x, y, p0=[a0, 0.05], bounds=([-2.0, 0.0], [2.0, 2.0]), maxfev=3000)
+                popt, pcov = curve_fit(
+                    exp_model, x, y, p0=[a0, 0.05], bounds=(exp_lower, exp_upper), maxfev=3000
+                )
+                diag = self._fit_diagnostics(popt, pcov, exp_lower, exp_upper)
                 return {
                     'zero_noise_value': float(popt[0]),
                     'model_type': 'exponential',
@@ -140,7 +192,8 @@ class LombScargleZNE:
                     'dominant_freq': dom_freq,
                     'params': popt,
                     'scale_factors': x,
-                    'values': y
+                    'values': y,
+                    **diag,
                 }
             except Exception:
                 pass
@@ -154,7 +207,10 @@ class LombScargleZNE:
                 'dominant_freq': dom_freq,
                 'params': p2,
                 'scale_factors': x,
-                'values': y
+                'values': y,
+                'at_bounds': False,
+                'cond_number': 1.0,
+                'unstable_fit': False,
             }
 
         sub_len = min(4, len(x))
@@ -166,7 +222,10 @@ class LombScargleZNE:
             'dominant_freq': dom_freq,
             'params': p1,
             'scale_factors': x,
-            'values': y
+            'values': y,
+            'at_bounds': False,
+            'cond_number': 1.0,
+            'unstable_fit': False,
         }
 
 

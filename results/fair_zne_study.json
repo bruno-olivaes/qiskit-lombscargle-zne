@@ -1,29 +1,417 @@
 {
   "echo_1q_re_audit": {
+    "scales": [
+      1.0,
+      2.0,
+      3.0,
+      5.0,
+      7.0,
+      10.0,
+      13.0,
+      17.0
+    ],
+    "total_shot_budget": 32768,
+    "n_seeds": 25,
     "Unmitigated": {
-      "mean_abs_error": 0.0485546875,
-      "se_abs_error": 0.0009455861938071112,
-      "median_abs_error": 0.04833984375
+      "mean_abs_error": 0.0490625,
+      "se_abs_error": 0.0010980430998319428,
+      "median_abs_error": 0.048828125,
+      "instability_rate": 0.0,
+      "n_circuits_per_seed": 1,
+      "total_shots_per_seed": 4096
+    },
+    "Unmitigated_Equal_Budget": {
+      "mean_abs_error": 0.048193359375,
+      "se_abs_error": 0.00036481804331709794,
+      "median_abs_error": 0.04864501953125,
+      "instability_rate": 0.0,
+      "n_circuits_per_seed": 1,
+      "total_shots_per_seed": 32768
     },
     "Global_Quadratic_ZNE": {
-      "mean_abs_error": 0.3195018224106269,
-      "se_abs_error": 0.0014569221712041626,
-      "median_abs_error": 0.3204247337692201
+      "mean_abs_error": 0.3199161170318359,
+      "se_abs_error": 0.001142396911488997,
+      "median_abs_error": 0.3181043615763224,
+      "instability_rate": 0.0,
+      "n_circuits_per_seed": 8,
+      "total_shots_per_seed": 32768
     },
     "Local_Linear_ZNE": {
-      "mean_abs_error": 0.12146428571428558,
-      "se_abs_error": 0.0015363717176912959,
-      "median_abs_error": 0.12320033482142878
+      "mean_abs_error": 0.11965959821428562,
+      "se_abs_error": 0.001757227978507258,
+      "median_abs_error": 0.11919642857142843,
+      "instability_rate": 0.0,
+      "n_circuits_per_seed": 4,
+      "total_shots_per_seed": 16384
     },
     "Exponential_ZNE": {
-      "mean_abs_error": 0.5770048456548933,
-      "se_abs_error": 0.0016128649586766627,
-      "median_abs_error": 0.5777736400137257
+      "mean_abs_error": 0.5766425899422347,
+      "se_abs_error": 0.0013914820272839979,
+      "median_abs_error": 0.5773951548439644,
+      "instability_rate": 0.0,
+      "n_circuits_per_seed": 8,
+      "total_shots_per_seed": 32768
     },
     "Damped_Harmonic_ZNE": {
-      "mean_abs_error": 0.00707107281487672,
-      "se_abs_error": 0.001070922085819545,
-      "median_abs_error": 0.005865225263831819
+      "mean_abs_error": 0.008399849892062806,
+      "se_abs_error": 0.0011993638955379382,
+      "median_abs_error": 0.005813639731991338,
+      "instability_rate": 0.0,
+      "n_circuits_per_seed": 8,
+      "total_shots_per_seed": 32768
+    },
+    "Auto_LombScargle_ZNE": {
+      "mean_abs_error": 0.008399849892062806,
+      "se_abs_error": 0.0011993638955379382,
+      "median_abs_error": 0.005813639731991338,
+      "instability_rate": 0.0,
+      "n_circuits_per_seed": 8,
+      "total_shots_per_seed": 32768,
+      "oscillator_selected_rate": 1.0
+    },
+    "decision_rule": {
+      "best_standard_method": "Unmitigated_Equal_Budget",
+      "best_standard_mae": 0.048193359375,
+      "unmitigated_equal_budget_mae": 0.048193359375,
+      "damped_harmonic_mae": 0.008399849892062806,
+      "auto_lombscargle_mae": 0.008399849892062806,
+      "z_harm_over_best_standard": 31.742851379839895,
+      "z_auto_over_best_standard": 31.742851379839895,
+      "z_auto_over_equal_budget": 31.742851379839895,
+      "auto_beats_equal_budget_2SE": true,
+      "spectral_niche_confirmed_2SE": true
+    },
+    "scenarios": {
+      "A1_deep_monomode_in_family": {
+        "scales": [
+          1.0,
+          2.0,
+          3.0,
+          5.0,
+          7.0,
+          10.0,
+          13.0,
+          17.0
+        ],
+        "total_shot_budget": 32768,
+        "n_seeds": 25,
+        "Unmitigated": {
+          "mean_abs_error": 0.0490625,
+          "se_abs_error": 0.0010980430998319428,
+          "median_abs_error": 0.048828125,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 1,
+          "total_shots_per_seed": 4096
+        },
+        "Unmitigated_Equal_Budget": {
+          "mean_abs_error": 0.048193359375,
+          "se_abs_error": 0.00036481804331709794,
+          "median_abs_error": 0.04864501953125,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 1,
+          "total_shots_per_seed": 32768
+        },
+        "Global_Quadratic_ZNE": {
+          "mean_abs_error": 0.3199161170318359,
+          "se_abs_error": 0.001142396911488997,
+          "median_abs_error": 0.3181043615763224,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 8,
+          "total_shots_per_seed": 32768
+        },
+        "Local_Linear_ZNE": {
+          "mean_abs_error": 0.11965959821428562,
+          "se_abs_error": 0.001757227978507258,
+          "median_abs_error": 0.11919642857142843,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 4,
+          "total_shots_per_seed": 16384
+        },
+        "Exponential_ZNE": {
+          "mean_abs_error": 0.5766425899422347,
+          "se_abs_error": 0.0013914820272839979,
+          "median_abs_error": 0.5773951548439644,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 8,
+          "total_shots_per_seed": 32768
+        },
+        "Damped_Harmonic_ZNE": {
+          "mean_abs_error": 0.008399849892062806,
+          "se_abs_error": 0.0011993638955379382,
+          "median_abs_error": 0.005813639731991338,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 8,
+          "total_shots_per_seed": 32768
+        },
+        "Auto_LombScargle_ZNE": {
+          "mean_abs_error": 0.008399849892062806,
+          "se_abs_error": 0.0011993638955379382,
+          "median_abs_error": 0.005813639731991338,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 8,
+          "total_shots_per_seed": 32768,
+          "oscillator_selected_rate": 1.0
+        },
+        "decision_rule": {
+          "best_standard_method": "Unmitigated_Equal_Budget",
+          "best_standard_mae": 0.048193359375,
+          "unmitigated_equal_budget_mae": 0.048193359375,
+          "damped_harmonic_mae": 0.008399849892062806,
+          "auto_lombscargle_mae": 0.008399849892062806,
+          "z_harm_over_best_standard": 31.742851379839895,
+          "z_auto_over_best_standard": 31.742851379839895,
+          "z_auto_over_equal_budget": 31.742851379839895,
+          "auto_beats_equal_budget_2SE": true,
+          "spectral_niche_confirmed_2SE": true
+        }
+      },
+      "A2_short_scale_coherent": {
+        "scales": [
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0
+        ],
+        "total_shot_budget": 24576,
+        "n_seeds": 25,
+        "Unmitigated": {
+          "mean_abs_error": 0.0496484375,
+          "se_abs_error": 0.0009365670542393581,
+          "median_abs_error": 0.05029296875,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 1,
+          "total_shots_per_seed": 4096
+        },
+        "Unmitigated_Equal_Budget": {
+          "mean_abs_error": 0.04870442708333332,
+          "se_abs_error": 0.00037228280392100874,
+          "median_abs_error": 0.04899088541666663,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 1,
+          "total_shots_per_seed": 24576
+        },
+        "Global_Quadratic_ZNE": {
+          "mean_abs_error": 0.03486132812499993,
+          "se_abs_error": 0.0030423376484217802,
+          "median_abs_error": 0.035546874999999645,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 6,
+          "total_shots_per_seed": 24576
+        },
+        "Local_Linear_ZNE": {
+          "mean_abs_error": 0.09469726562499944,
+          "se_abs_error": 0.0018339452011479987,
+          "median_abs_error": 0.09497070312499911,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 4,
+          "total_shots_per_seed": 16384
+        },
+        "Exponential_ZNE": {
+          "mean_abs_error": 0.2758143075106744,
+          "se_abs_error": 0.002580729858803769,
+          "median_abs_error": 0.2765094908094117,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 6,
+          "total_shots_per_seed": 24576
+        },
+        "Damped_Harmonic_ZNE": {
+          "mean_abs_error": 0.3600795048142267,
+          "se_abs_error": 0.18986685675478376,
+          "median_abs_error": 0.015696947778338854,
+          "instability_rate": 1.0,
+          "n_circuits_per_seed": 6,
+          "total_shots_per_seed": 24576
+        },
+        "Auto_LombScargle_ZNE": {
+          "mean_abs_error": 0.09469726562499944,
+          "se_abs_error": 0.0018339452011479987,
+          "median_abs_error": 0.09497070312499911,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 6,
+          "total_shots_per_seed": 24576,
+          "oscillator_selected_rate": 0.0
+        },
+        "decision_rule": {
+          "best_standard_method": "Global_Quadratic_ZNE",
+          "best_standard_mae": 0.03486132812499993,
+          "unmitigated_equal_budget_mae": 0.04870442708333332,
+          "damped_harmonic_mae": 0.3600795048142267,
+          "auto_lombscargle_mae": 0.09469726562499944,
+          "z_harm_over_best_standard": -1.7126550669247922,
+          "z_auto_over_best_standard": -16.844054828745186,
+          "z_auto_over_equal_budget": -24.57736249881327,
+          "auto_beats_equal_budget_2SE": false,
+          "spectral_niche_confirmed_2SE": false
+        }
+      },
+      "A3_monotonic_depol_amp_damping": {
+        "scales": [
+          1.0,
+          2.0,
+          3.0,
+          5.0,
+          7.0,
+          10.0,
+          13.0,
+          17.0
+        ],
+        "total_shot_budget": 32768,
+        "n_seeds": 25,
+        "Unmitigated": {
+          "mean_abs_error": 0.03177734375,
+          "se_abs_error": 0.0007192389994727971,
+          "median_abs_error": 0.0322265625,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 1,
+          "total_shots_per_seed": 4096
+        },
+        "Unmitigated_Equal_Budget": {
+          "mean_abs_error": 0.0323828125,
+          "se_abs_error": 0.0002367314451735165,
+          "median_abs_error": 0.03228759765625,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 1,
+          "total_shots_per_seed": 32768
+        },
+        "Global_Quadratic_ZNE": {
+          "mean_abs_error": 0.004590802207412561,
+          "se_abs_error": 0.0006145945827123059,
+          "median_abs_error": 0.003914024065387434,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 8,
+          "total_shots_per_seed": 32768
+        },
+        "Local_Linear_ZNE": {
+          "mean_abs_error": 0.004398437500000134,
+          "se_abs_error": 0.0006496531616630289,
+          "median_abs_error": 0.004296875000000089,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 4,
+          "total_shots_per_seed": 16384
+        },
+        "Exponential_ZNE": {
+          "mean_abs_error": 0.003653850022617933,
+          "se_abs_error": 0.0003705176622059518,
+          "median_abs_error": 0.003742641219834253,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 8,
+          "total_shots_per_seed": 32768
+        },
+        "Damped_Harmonic_ZNE": {
+          "mean_abs_error": 0.2955895438929806,
+          "se_abs_error": 0.16116925202375057,
+          "median_abs_error": 0.004265613282763425,
+          "instability_rate": 1.0,
+          "n_circuits_per_seed": 8,
+          "total_shots_per_seed": 32768
+        },
+        "Auto_LombScargle_ZNE": {
+          "mean_abs_error": 0.004398437500000134,
+          "se_abs_error": 0.0006496531616630289,
+          "median_abs_error": 0.004296875000000089,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 8,
+          "total_shots_per_seed": 32768,
+          "oscillator_selected_rate": 0.0
+        },
+        "decision_rule": {
+          "best_standard_method": "Exponential_ZNE",
+          "best_standard_mae": 0.003653850022617933,
+          "unmitigated_equal_budget_mae": 0.0323828125,
+          "damped_harmonic_mae": 0.2955895438929806,
+          "auto_lombscargle_mae": 0.004398437500000134,
+          "z_harm_over_best_standard": -1.8113561907906892,
+          "z_auto_over_best_standard": -0.9955903396752463,
+          "z_auto_over_equal_budget": 40.47252726420106,
+          "auto_beats_equal_budget_2SE": true,
+          "spectral_niche_confirmed_2SE": false
+        }
+      },
+      "A4_bichromatic_gaussian_1f_drift": {
+        "scales": [
+          1.0,
+          2.0,
+          3.0,
+          5.0,
+          7.0,
+          10.0,
+          13.0,
+          17.0
+        ],
+        "total_shot_budget": 32768,
+        "n_seeds": 25,
+        "Unmitigated": {
+          "mean_abs_error": 0.0891796875,
+          "se_abs_error": 0.001387062567412865,
+          "median_abs_error": 0.0888671875,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 1,
+          "total_shots_per_seed": 4096
+        },
+        "Unmitigated_Equal_Budget": {
+          "mean_abs_error": 0.090361328125,
+          "se_abs_error": 0.000916978288192412,
+          "median_abs_error": 0.09075927734375,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 1,
+          "total_shots_per_seed": 32768
+        },
+        "Global_Quadratic_ZNE": {
+          "mean_abs_error": 0.03871684120322579,
+          "se_abs_error": 0.006229906619517217,
+          "median_abs_error": 0.03506022939959874,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 8,
+          "total_shots_per_seed": 32768
+        },
+        "Local_Linear_ZNE": {
+          "mean_abs_error": 0.16672098214285713,
+          "se_abs_error": 0.00414856066787848,
+          "median_abs_error": 0.16286272321428585,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 4,
+          "total_shots_per_seed": 16384
+        },
+        "Exponential_ZNE": {
+          "mean_abs_error": 0.6979200201737933,
+          "se_abs_error": 0.006274909858739852,
+          "median_abs_error": 0.697670658362159,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 8,
+          "total_shots_per_seed": 32768
+        },
+        "Damped_Harmonic_ZNE": {
+          "mean_abs_error": 0.20066512612239917,
+          "se_abs_error": 0.01287837525533666,
+          "median_abs_error": 0.1876812097082059,
+          "instability_rate": 1.0,
+          "n_circuits_per_seed": 8,
+          "total_shots_per_seed": 32768
+        },
+        "Auto_LombScargle_ZNE": {
+          "mean_abs_error": 0.16672098214285713,
+          "se_abs_error": 0.00414856066787848,
+          "median_abs_error": 0.16286272321428585,
+          "instability_rate": 0.0,
+          "n_circuits_per_seed": 8,
+          "total_shots_per_seed": 32768,
+          "oscillator_selected_rate": 0.0
+        },
+        "decision_rule": {
+          "best_standard_method": "Global_Quadratic_ZNE",
+          "best_standard_mae": 0.03871684120322579,
+          "unmitigated_equal_budget_mae": 0.090361328125,
+          "damped_harmonic_mae": 0.20066512612239917,
+          "auto_lombscargle_mae": 0.16672098214285713,
+          "z_harm_over_best_standard": -11.320231831156772,
+          "z_auto_over_best_standard": -17.101869278921274,
+          "z_auto_over_equal_budget": -17.972498223291023,
+          "auto_beats_equal_budget_2SE": false,
+          "spectral_niche_confirmed_2SE": false
+        }
+      }
     }
   },
   "ideal_expectation": -0.4080925377828092,
@@ -40,179 +428,468 @@
   "configs": {
     "eps_0.00": {
       "Unmitigated": {
-        "mean_abs_error": 0.029399030226247347,
-        "se_abs_error": 0.003579656726335021,
-        "median_abs_error": 0.02709253778280918
+        "mean_abs_error": 0.02727403022624734,
+        "se_abs_error": 0.0027390283550840877,
+        "median_abs_error": 0.024592537782809176,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 1,
+        "total_shots_per_seed": 4000
+      },
+      "Unmitigated_Equal_Budget": {
+        "mean_abs_error": 0.02646753778280918,
+        "se_abs_error": 0.0014364269450344678,
+        "median_abs_error": 0.027259204449475855,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 1,
+        "total_shots_per_seed": 24000
+      },
+      "Pauli_Twirl_Only_Equal_Budget": {
+        "mean_abs_error": 0.025909204449475847,
+        "se_abs_error": 0.0012526229789866475,
+        "median_abs_error": 0.027175871116142503,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 12,
+        "total_shots_per_seed": 24000
       },
       "Linear_ZNE": {
-        "mean_abs_error": 0.019547452830188685,
-        "se_abs_error": 0.00285264936946661,
-        "median_abs_error": 0.018893985128242058
+        "mean_abs_error": 0.019358653903659782,
+        "se_abs_error": 0.0035862451575270505,
+        "median_abs_error": 0.014845469049655474,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 4,
+        "total_shots_per_seed": 16000
       },
       "Quadratic_ZNE": {
-        "mean_abs_error": 0.03797490679843252,
-        "se_abs_error": 0.006227774180942976,
-        "median_abs_error": 0.040934085846836304
+        "mean_abs_error": 0.039636672281151614,
+        "se_abs_error": 0.007592128450173437,
+        "median_abs_error": 0.03353863020217446,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 6,
+        "total_shots_per_seed": 24000
       },
       "Exponential_ZNE": {
-        "mean_abs_error": 0.015357404216334197,
-        "se_abs_error": 0.0018620838782036667,
-        "median_abs_error": 0.016139076168161653
+        "mean_abs_error": 0.015642423935452364,
+        "se_abs_error": 0.002704503557966051,
+        "median_abs_error": 0.014084685053005253,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 6,
+        "total_shots_per_seed": 24000
       },
       "Damped_Harmonic_ZNE": {
-        "mean_abs_error": 1.343119504416636,
-        "se_abs_error": 0.15901938883532468,
-        "median_abs_error": 0.8568995742189368
+        "mean_abs_error": 1.2701055588799819,
+        "se_abs_error": 0.15303799773862328,
+        "median_abs_error": 0.8221644950584359,
+        "instability_rate": 1.0,
+        "n_circuits_per_seed": 6,
+        "total_shots_per_seed": 24000
+      },
+      "Auto_LombScargle_ZNE": {
+        "mean_abs_error": 0.019358653903659782,
+        "se_abs_error": 0.0035862451575270505,
+        "median_abs_error": 0.014845469049655474,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 6,
+        "total_shots_per_seed": 24000,
+        "oscillator_selected_rate": 0.0
       },
       "Pauli_Twirl_Linear_ZNE": {
-        "mean_abs_error": 0.02125598978824806,
-        "se_abs_error": 0.0032260061407911483,
-        "median_abs_error": 0.020925588901826747
+        "mean_abs_error": 0.024273201499227338,
+        "se_abs_error": 0.00348428581835184,
+        "median_abs_error": 0.02392403903659779,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 48,
+        "total_shots_per_seed": 24000
       },
       "Pauli_Twirl_Exp_ZNE": {
-        "mean_abs_error": 0.026347064900093642,
-        "se_abs_error": 0.003779903986594959,
-        "median_abs_error": 0.02791922186197132
+        "mean_abs_error": 0.03068524664644493,
+        "se_abs_error": 0.004668296813750524,
+        "median_abs_error": 0.02606701027799585,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 48,
+        "total_shots_per_seed": 24000
       },
       "decision_rule": {
         "best_standard_method": "Exponential_ZNE",
-        "best_standard_mae": 0.015357404216334197,
-        "damped_harmonic_mae": 1.343119504416636,
-        "z_score_advantage_over_best_standard": -8.34911445978994,
+        "best_standard_mae": 0.015642423935452364,
+        "unmitigated_equal_budget_mae": 0.02646753778280918,
+        "damped_harmonic_mae": 1.2701055588799819,
+        "auto_lombscargle_mae": 0.019358653903659782,
+        "z_score_advantage_over_best_standard": -8.195790018583928,
+        "z_best_over_equal_budget": 3.5349655683203767,
         "spectral_niche_confirmed_2SE": false
       }
     },
     "eps_0.04": {
       "Unmitigated": {
-        "mean_abs_error": 0.1484425377828092,
-        "se_abs_error": 0.0032735181460672516,
-        "median_abs_error": 0.14559253778280917
+        "mean_abs_error": 0.1484175377828092,
+        "se_abs_error": 0.002718909175618626,
+        "median_abs_error": 0.14634253778280917,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 1,
+        "total_shots_per_seed": 4000
+      },
+      "Unmitigated_Equal_Budget": {
+        "mean_abs_error": 0.14499670444947585,
+        "se_abs_error": 0.0007500067007497945,
+        "median_abs_error": 0.14413420444947586,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 1,
+        "total_shots_per_seed": 24000
+      },
+      "Pauli_Twirl_Only_Equal_Budget": {
+        "mean_abs_error": 0.056534204449475836,
+        "se_abs_error": 0.003725107930458825,
+        "median_abs_error": 0.06325920444947586,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 12,
+        "total_shots_per_seed": 24000
       },
       "Linear_ZNE": {
-        "mean_abs_error": 0.03750480063628636,
-        "se_abs_error": 0.005221818202916489,
-        "median_abs_error": 0.03420304847056019
+        "mean_abs_error": 0.04071037165584908,
+        "se_abs_error": 0.0050552023474822695,
+        "median_abs_error": 0.040211101031206925,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 4,
+        "total_shots_per_seed": 16000
       },
       "Quadratic_ZNE": {
-        "mean_abs_error": 0.09523900920683201,
-        "se_abs_error": 0.0096682624643896,
-        "median_abs_error": 0.08025791732894377
+        "mean_abs_error": 0.10274147225535554,
+        "se_abs_error": 0.008879599848084768,
+        "median_abs_error": 0.09805559801005698,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 6,
+        "total_shots_per_seed": 24000
       },
       "Exponential_ZNE": {
-        "mean_abs_error": 0.360064347374852,
-        "se_abs_error": 0.01715091229791514,
-        "median_abs_error": 0.3425014827025061
+        "mean_abs_error": 0.3763417363526222,
+        "se_abs_error": 0.01570388549046491,
+        "median_abs_error": 0.3820722631043432,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 6,
+        "total_shots_per_seed": 24000
       },
       "Damped_Harmonic_ZNE": {
-        "mean_abs_error": 2.2868379634777822,
-        "se_abs_error": 1.9152080500736705e-13,
-        "median_abs_error": 2.286837963477568
+        "mean_abs_error": 2.2868379634776703,
+        "se_abs_error": 8.220038302666723e-14,
+        "median_abs_error": 2.286837963477567,
+        "instability_rate": 1.0,
+        "n_circuits_per_seed": 6,
+        "total_shots_per_seed": 24000
+      },
+      "Auto_LombScargle_ZNE": {
+        "mean_abs_error": 0.04071037165584908,
+        "se_abs_error": 0.0050552023474822695,
+        "median_abs_error": 0.040211101031206925,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 6,
+        "total_shots_per_seed": 24000,
+        "oscillator_selected_rate": 0.0
       },
       "Pauli_Twirl_Linear_ZNE": {
-        "mean_abs_error": 0.02852786192354597,
-        "se_abs_error": 0.006504155246664706,
-        "median_abs_error": 0.0191811496426475
+        "mean_abs_error": 0.03471548272788263,
+        "se_abs_error": 0.004237727640053204,
+        "median_abs_error": 0.03657054766600781,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 48,
+        "total_shots_per_seed": 24000
       },
       "Pauli_Twirl_Exp_ZNE": {
-        "mean_abs_error": 0.029193837100187376,
-        "se_abs_error": 0.004711738837935728,
-        "median_abs_error": 0.02152440677221487
+        "mean_abs_error": 0.03634613363218788,
+        "se_abs_error": 0.004371388344368677,
+        "median_abs_error": 0.03546271474846949,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 48,
+        "total_shots_per_seed": 24000
       },
       "decision_rule": {
         "best_standard_method": "Pauli_Twirl_Linear_ZNE",
-        "best_standard_mae": 0.02852786192354597,
-        "damped_harmonic_mae": 2.2868379634777822,
-        "z_score_advantage_over_best_standard": -347.2103625927879,
+        "best_standard_mae": 0.03471548272788263,
+        "unmitigated_equal_budget_mae": 0.14499670444947585,
+        "damped_harmonic_mae": 2.2868379634776703,
+        "auto_lombscargle_mae": 0.04071037165584908,
+        "z_score_advantage_over_best_standard": -531.4457822781438,
+        "z_best_over_equal_budget": 25.625430079995752,
         "spectral_niche_confirmed_2SE": false
       }
     },
     "eps_0.08": {
       "Unmitigated": {
-        "mean_abs_error": 0.28981753778280916,
-        "se_abs_error": 0.0031987816348366806,
-        "median_abs_error": 0.2880925377828092
+        "mean_abs_error": 0.2872425377828091,
+        "se_abs_error": 0.0031683259733941856,
+        "median_abs_error": 0.2885925377828092,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 1,
+        "total_shots_per_seed": 4000
+      },
+      "Unmitigated_Equal_Budget": {
+        "mean_abs_error": 0.28826753778280917,
+        "se_abs_error": 0.0016736465685016396,
+        "median_abs_error": 0.2859675377828092,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 1,
+        "total_shots_per_seed": 24000
+      },
+      "Pauli_Twirl_Only_Equal_Budget": {
+        "mean_abs_error": 0.09913837111614252,
+        "se_abs_error": 0.0045158811505385575,
+        "median_abs_error": 0.09938420444947588,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 12,
+        "total_shots_per_seed": 24000
       },
       "Linear_ZNE": {
-        "mean_abs_error": 0.07257054510128787,
-        "se_abs_error": 0.005464375326277935,
-        "median_abs_error": 0.07082575736543878
+        "mean_abs_error": 0.07347636383444146,
+        "se_abs_error": 0.005646153682557451,
+        "median_abs_error": 0.07225803499347117,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 4,
+        "total_shots_per_seed": 16000
       },
       "Quadratic_ZNE": {
-        "mean_abs_error": 0.2088219224182546,
-        "se_abs_error": 0.010046739438630773,
-        "median_abs_error": 0.2045507753660507
+        "mean_abs_error": 0.2086388844497221,
+        "se_abs_error": 0.010098805347799585,
+        "median_abs_error": 0.19239351783604092,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 6,
+        "total_shots_per_seed": 24000
       },
       "Exponential_ZNE": {
-        "mean_abs_error": 0.5389925376088783,
-        "se_abs_error": 0.0010907907729384094,
-        "median_abs_error": 0.5381342041145987
+        "mean_abs_error": 0.5404592042405622,
+        "se_abs_error": 0.0017154632638558863,
+        "median_abs_error": 0.5377175377828092,
+        "instability_rate": 1.0,
+        "n_circuits_per_seed": 6,
+        "total_shots_per_seed": 24000
       },
       "Damped_Harmonic_ZNE": {
-        "mean_abs_error": 0.365048801316923,
-        "se_abs_error": 0.06430882501392728,
-        "median_abs_error": 0.6079840415913912
+        "mean_abs_error": 0.30417986077822085,
+        "se_abs_error": 0.06496663577616492,
+        "median_abs_error": 0.05867301588102408,
+        "instability_rate": 1.0,
+        "n_circuits_per_seed": 6,
+        "total_shots_per_seed": 24000
+      },
+      "Auto_LombScargle_ZNE": {
+        "mean_abs_error": 0.07347636383444146,
+        "se_abs_error": 0.005646153682557451,
+        "median_abs_error": 0.07225803499347117,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 6,
+        "total_shots_per_seed": 24000,
+        "oscillator_selected_rate": 0.0
       },
       "Pauli_Twirl_Linear_ZNE": {
-        "mean_abs_error": 0.05510748358612759,
-        "se_abs_error": 0.009168629112371715,
-        "median_abs_error": 0.04772792003593898
+        "mean_abs_error": 0.0766372647275951,
+        "se_abs_error": 0.010502078752925323,
+        "median_abs_error": 0.08960062403617844,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 48,
+        "total_shots_per_seed": 24000
       },
       "Pauli_Twirl_Exp_ZNE": {
-        "mean_abs_error": 0.05617333104773525,
-        "se_abs_error": 0.008931757088376794,
-        "median_abs_error": 0.053000436222464475
+        "mean_abs_error": 0.07142036038560465,
+        "se_abs_error": 0.008205935140944077,
+        "median_abs_error": 0.0874458505819184,
+        "instability_rate": 0.25,
+        "n_circuits_per_seed": 48,
+        "total_shots_per_seed": 24000
       },
       "decision_rule": {
-        "best_standard_method": "Pauli_Twirl_Linear_ZNE",
-        "best_standard_mae": 0.05510748358612759,
-        "damped_harmonic_mae": 0.365048801316923,
-        "z_score_advantage_over_best_standard": -4.771327936558912,
+        "best_standard_method": "Pauli_Twirl_Exp_ZNE",
+        "best_standard_mae": 0.07142036038560465,
+        "unmitigated_equal_budget_mae": 0.28826753778280917,
+        "damped_harmonic_mae": 0.30417986077822085,
+        "auto_lombscargle_mae": 0.07347636383444146,
+        "z_score_advantage_over_best_standard": -3.554511883273518,
+        "z_best_over_equal_budget": 25.89259908980124,
         "spectral_niche_confirmed_2SE": false
       }
     },
     "eps_0.14": {
       "Unmitigated": {
-        "mean_abs_error": 0.530817537782809,
-        "se_abs_error": 0.0032896318383033303,
-        "median_abs_error": 0.5318425377828091
+        "mean_abs_error": 0.5346925377828091,
+        "se_abs_error": 0.0028262398304014064,
+        "median_abs_error": 0.5343425377828093,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 1,
+        "total_shots_per_seed": 4000
+      },
+      "Unmitigated_Equal_Budget": {
+        "mean_abs_error": 0.5322175377828091,
+        "se_abs_error": 0.001147516706041038,
+        "median_abs_error": 0.5339675377828093,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 1,
+        "total_shots_per_seed": 24000
+      },
+      "Pauli_Twirl_Only_Equal_Budget": {
+        "mean_abs_error": 0.15542170444947587,
+        "se_abs_error": 0.008390280149485004,
+        "median_abs_error": 0.15175920444947583,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 12,
+        "total_shots_per_seed": 24000
       },
       "Linear_ZNE": {
-        "mean_abs_error": 0.09593020287714886,
-        "se_abs_error": 0.004079559606743887,
-        "median_abs_error": 0.09205695826798438
+        "mean_abs_error": 0.10020032080167711,
+        "se_abs_error": 0.005572482407267475,
+        "median_abs_error": 0.09837690435962862,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 4,
+        "total_shots_per_seed": 16000
       },
       "Quadratic_ZNE": {
-        "mean_abs_error": 0.20975417286108916,
-        "se_abs_error": 0.009956288420779473,
-        "median_abs_error": 0.20577957756496984
+        "mean_abs_error": 0.20057782825657527,
+        "se_abs_error": 0.008639406554757494,
+        "median_abs_error": 0.20574099820278713,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 6,
+        "total_shots_per_seed": 24000
       },
       "Exponential_ZNE": {
-        "mean_abs_error": 0.7858092044494758,
-        "se_abs_error": 0.0010383966216526528,
-        "median_abs_error": 0.7839675377828091
+        "mean_abs_error": 0.7876342044383311,
+        "se_abs_error": 0.0011900768462855017,
+        "median_abs_error": 0.7876758711161425,
+        "instability_rate": 1.0,
+        "n_circuits_per_seed": 6,
+        "total_shots_per_seed": 24000
       },
       "Damped_Harmonic_ZNE": {
-        "mean_abs_error": 0.5578345939321967,
-        "se_abs_error": 0.001786873941057509,
-        "median_abs_error": 0.5575931662208089
+        "mean_abs_error": 0.5549890351662343,
+        "se_abs_error": 0.0017561351454051567,
+        "median_abs_error": 0.5554115721219512,
+        "instability_rate": 1.0,
+        "n_circuits_per_seed": 6,
+        "total_shots_per_seed": 24000
+      },
+      "Auto_LombScargle_ZNE": {
+        "mean_abs_error": 0.10020032080167711,
+        "se_abs_error": 0.005572482407267475,
+        "median_abs_error": 0.09837690435962862,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 6,
+        "total_shots_per_seed": 24000,
+        "oscillator_selected_rate": 0.0
       },
       "Pauli_Twirl_Linear_ZNE": {
-        "mean_abs_error": 0.12111671841602871,
-        "se_abs_error": 0.016884330010387954,
-        "median_abs_error": 0.11374961325450725
+        "mean_abs_error": 0.12122568068017969,
+        "se_abs_error": 0.015786409487349634,
+        "median_abs_error": 0.12794774892386943,
+        "instability_rate": 0.0,
+        "n_circuits_per_seed": 48,
+        "total_shots_per_seed": 24000
       },
       "Pauli_Twirl_Exp_ZNE": {
-        "mean_abs_error": 0.11817906930576208,
-        "se_abs_error": 0.01229692401291442,
-        "median_abs_error": 0.11206350632127776
+        "mean_abs_error": 0.09967157916993999,
+        "se_abs_error": 0.013579118683851516,
+        "median_abs_error": 0.11659375983964271,
+        "instability_rate": 0.2,
+        "n_circuits_per_seed": 48,
+        "total_shots_per_seed": 24000
       },
       "decision_rule": {
-        "best_standard_method": "Linear_ZNE",
-        "best_standard_mae": 0.09593020287714886,
-        "damped_harmonic_mae": 0.5578345939321967,
-        "z_score_advantage_over_best_standard": -103.7117710917834,
+        "best_standard_method": "Pauli_Twirl_Exp_ZNE",
+        "best_standard_mae": 0.09967157916993999,
+        "unmitigated_equal_budget_mae": 0.5322175377828091,
+        "damped_harmonic_mae": 0.5549890351662343,
+        "auto_lombscargle_mae": 0.10020032080167711,
+        "z_score_advantage_over_best_standard": -33.25377172611575,
+        "z_best_over_equal_budget": 31.740625450702225,
         "spectral_niche_confirmed_2SE": false
       }
+    }
+  },
+  "noisy_twirl_frame_eps_0.08": {
+    "Unmitigated": {
+      "mean_abs_error": 0.2848425377828092,
+      "se_abs_error": 0.002621143784083986,
+      "median_abs_error": 0.2850925377828092,
+      "instability_rate": 0.0,
+      "n_circuits_per_seed": 1,
+      "total_shots_per_seed": 4000
+    },
+    "Unmitigated_Equal_Budget": {
+      "mean_abs_error": 0.2911383711161425,
+      "se_abs_error": 0.0011919790873739537,
+      "median_abs_error": 0.29192587111614254,
+      "instability_rate": 0.0,
+      "n_circuits_per_seed": 1,
+      "total_shots_per_seed": 24000
+    },
+    "Pauli_Twirl_Only_Equal_Budget": {
+      "mean_abs_error": 0.11672170444947585,
+      "se_abs_error": 0.006453099109834359,
+      "median_abs_error": 0.11692587111614253,
+      "instability_rate": 0.0,
+      "n_circuits_per_seed": 12,
+      "total_shots_per_seed": 24000
+    },
+    "Linear_ZNE": {
+      "mean_abs_error": 0.08170874254064095,
+      "se_abs_error": 0.006293500680292035,
+      "median_abs_error": 0.07181615493956278,
+      "instability_rate": 0.0,
+      "n_circuits_per_seed": 4,
+      "total_shots_per_seed": 16000
+    },
+    "Quadratic_ZNE": {
+      "mean_abs_error": 0.23704226040232115,
+      "se_abs_error": 0.008619675181802835,
+      "median_abs_error": 0.23236560965854086,
+      "instability_rate": 0.0,
+      "n_circuits_per_seed": 6,
+      "total_shots_per_seed": 24000
+    },
+    "Exponential_ZNE": {
+      "mean_abs_error": 0.5413425376185994,
+      "se_abs_error": 0.0013419131650183036,
+      "median_abs_error": 0.5424675376515498,
+      "instability_rate": 1.0,
+      "n_circuits_per_seed": 6,
+      "total_shots_per_seed": 24000
+    },
+    "Damped_Harmonic_ZNE": {
+      "mean_abs_error": 0.24932983363492203,
+      "se_abs_error": 0.06278612754735463,
+      "median_abs_error": 0.0578749281966385,
+      "instability_rate": 1.0,
+      "n_circuits_per_seed": 6,
+      "total_shots_per_seed": 24000
+    },
+    "Auto_LombScargle_ZNE": {
+      "mean_abs_error": 0.08170874254064095,
+      "se_abs_error": 0.006293500680292035,
+      "median_abs_error": 0.07181615493956278,
+      "instability_rate": 0.0,
+      "n_circuits_per_seed": 6,
+      "total_shots_per_seed": 24000,
+      "oscillator_selected_rate": 0.0
+    },
+    "Pauli_Twirl_Linear_ZNE": {
+      "mean_abs_error": 0.03831491297557347,
+      "se_abs_error": 0.0070117844846428815,
+      "median_abs_error": 0.03466744793554949,
+      "instability_rate": 0.0,
+      "n_circuits_per_seed": 48,
+      "total_shots_per_seed": 24000
+    },
+    "Pauli_Twirl_Exp_ZNE": {
+      "mean_abs_error": 0.040607933424090595,
+      "se_abs_error": 0.006903357177419351,
+      "median_abs_error": 0.032506567603854314,
+      "instability_rate": 0.0,
+      "n_circuits_per_seed": 48,
+      "total_shots_per_seed": 24000
+    },
+    "decision_rule": {
+      "best_standard_method": "Pauli_Twirl_Linear_ZNE",
+      "best_standard_mae": 0.03831491297557347,
+      "unmitigated_equal_budget_mae": 0.2911383711161425,
+      "damped_harmonic_mae": 0.24932983363492203,
+      "auto_lombscargle_mae": 0.08170874254064095,
+      "z_score_advantage_over_best_standard": -3.34008866381461,
+      "z_best_over_equal_budget": 35.54696062048087,
+      "spectral_niche_confirmed_2SE": false
     }
   }
 }

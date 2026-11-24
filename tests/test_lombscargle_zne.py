@@ -90,6 +90,7 @@ def test_linear_and_damped_harmonic_extrapolation():
     zne = LombScargleZNE()
     res_lin = zne.extrapolate(x[:4], y_lin, method='linear')
     assert abs(res_lin['zero_noise_value'] - 1.0) < 1e-4
+    assert res_lin['unstable_fit'] is False
 
     omega = 0.4
     gamma = 0.02
@@ -97,3 +98,67 @@ def test_linear_and_damped_harmonic_extrapolation():
     res_osc = zne.extrapolate(x, y_osc, method='damped_oscillator')
     assert abs(res_osc['zero_noise_value'] - 1.0) < 0.05
     assert abs(res_osc['dominant_freq'] - omega) < 0.05
+    assert res_osc['at_bounds'] is False
+    assert res_osc['unstable_fit'] is False
+    assert res_osc['cond_number'] < 1e4
+
+
+def test_stability_diagnostics_and_auto_fallback():
+    zne = LombScargleZNE()
+    # 1. Clean in-family damped oscillator should pass auto stability gate
+    x_deep = np.array([1.0, 2.0, 3.0, 5.0, 7.0, 10.0, 13.0, 17.0])
+    y_deep = np.exp(-0.025 * x_deep) * np.cos(0.22 * x_deep)
+    res_auto_ok = zne.extrapolate(x_deep, y_deep, method='auto')
+    assert res_auto_ok['model_type'] == 'damped_oscillator'
+    assert res_auto_ok['unstable_fit'] is False
+    assert abs(res_auto_ok['zero_noise_value'] - 1.0) < 0.02
+
+    # 2. Purely monotonic short-scale data triggers auto fallback to linear_local
+    x_short = np.array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0])
+    y_mono = np.exp(-0.06 * x_short)
+    res_mono_auto = zne.extrapolate(x_short, y_mono, method='auto')
+    assert res_mono_auto['model_type'] == 'linear_local'
+    assert res_mono_auto['unstable_fit'] is False
+
+    # 3. Pathological upward/saturating short data triggers bound saturation & instability in forced oscillator
+    y_bad = np.array([0.92, 0.90, 0.91, 0.95, 1.02, 1.15])
+    res_bad_forced = zne.extrapolate(x_short, y_bad, method='damped_oscillator')
+    assert 'cond_number' in res_bad_forced
+    assert 'at_bounds' in res_bad_forced
+    assert res_bad_forced['unstable_fit'] is True
+
+    # Auto rejects an unstable harmonic fit and falls back to linear_local
+    res_bad_auto = zne.extrapolate(x_short, y_bad, method='auto')
+    assert res_bad_auto['model_type'] == 'linear_local'
+    assert res_bad_auto['unstable_fit'] is False
+
+
+def test_fair_zne_study_json_completeness():
+    import json
+    from pathlib import Path
+
+    json_path = Path(__file__).resolve().parents[1] / "results" / "fair_zne_study.json"
+    assert json_path.exists(), f"Expected benchmark output at {json_path}"
+    data = json.loads(json_path.read_text(encoding="utf-8"))
+
+    scenarios = data["echo_1q_re_audit"]["scenarios"]
+    expected_scenarios = {
+        "A1_deep_monomode_in_family",
+        "A2_short_scale_coherent",
+        "A3_monotonic_depol_amp_damping",
+        "A4_bichromatic_gaussian_1f_drift",
+    }
+    assert expected_scenarios.issubset(set(scenarios.keys()))
+    for sc in expected_scenarios:
+        assert "Unmitigated_Equal_Budget" in scenarios[sc]
+        assert "Auto_LombScargle_ZNE" in scenarios[sc]
+        assert "instability_rate" in scenarios[sc]["Damped_Harmonic_ZNE"]
+        assert "n_circuits_per_seed" in scenarios[sc]["Unmitigated_Equal_Budget"]
+
+    assert "noisy_twirl_frame_eps_0.08" in data
+    for cfg in list(data["configs"].values()) + [data["noisy_twirl_frame_eps_0.08"]]:
+        assert "Unmitigated_Equal_Budget" in cfg
+        assert "Pauli_Twirl_Only_Equal_Budget" in cfg
+        assert "Auto_LombScargle_ZNE" in cfg
+        assert "instability_rate" in cfg["Damped_Harmonic_ZNE"]
+        assert "n_circuits_per_seed" in cfg["Pauli_Twirl_Linear_ZNE"]

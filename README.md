@@ -1,97 +1,70 @@
-# qiskit-lombscargle-zne: Spectral Diagnostic & Pre-Registered ZNE / Pauli Twirling Benchmark Suite (v2.0)
+# qiskit-lombscargle-zne: Equal-Budget, Out-of-Family & Optimizer-Instability ZNE Audit (v3.0)
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24121693.svg)](https://doi.org/10.5281/zenodo.24121693)
+[![CI](https://github.com/bruno-olivaes/qiskit-lombscargle-zne/actions/workflows/ci.yml/badge.svg)](https://github.com/bruno-olivaes/qiskit-lombscargle-zne/actions/workflows/ci.yml)
 [![Qiskit](https://img.shields.io/badge/Qiskit-2.5+-6133BD.svg)](https://qiskit.org/)
 [![Paper PDF](https://img.shields.io/badge/Paper-PDF_Manuscript-red.svg)](manuscript/main.pdf)
 [![Aer](https://img.shields.io/badge/Qiskit_Aer-0.17+-blue.svg)](https://qiskit.github.io/qiskit-aer/)
-[![Tests](https://img.shields.io/badge/Pytest-5%2F5_Passed-brightgreen.svg)]()
+[![Tests](https://img.shields.io/badge/Pytest-7%2F7_Passed-brightgreen.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-An open-source quantum error mitigation (QEM) research and benchmarking repository for **Qiskit 2.5+ & Qiskit Aer**, investigating **Zero-Noise Extrapolation (ZNE)** under combined **coherent unitary over-rotation ($R_Z / R_{ZZ}$ crosstalk)** and **stochastic depolarizing noise**.
+An open-source quantum error mitigation (QEM) benchmark suite for **Qiskit 2.5+ & Qiskit Aer**, auditing **Zero-Noise Extrapolation (ZNE)** under matched equal-shot budgets, out-of-family noise channels, non-linear optimizer instability diagnostics, and finite Pauli-twirl frame errors.
 
 ---
 
-## 1. Scientific Scope & Pre-Registered Audit (v2.0)
+## 1. Scientific Scope & v3.0 Audit Controls
 
-In Version 2.0, this repository was upgraded from a single-qubit demonstration into a **pre-registered head-to-head methodological benchmark** (`benchmarks/fair_zne_study.py`) implementing:
-1. **Gate-Level Non-Uniform Fractional Unitary Folding (`fold_circuit_fractional`):** Replaces subsets of 2-qubit and 1-qubit gates $G \to G G^\dagger G$ (weighted $10:1$ by hardware error rate and protected by transpiler barriers) to achieve fine-grained non-uniform scale factors $\lambda \in [1.0, 3.5]$ while preserving exact logical unitary equivalence ($U_{\mathrm{folded}} = U_{\mathrm{ideal}}$).
-2. **Exact 2-Qubit Clifford Pauli Twirling (`pauli_twirl_circuit`):** Implements randomized compiling across all 16 two-qubit Pauli conjugations $(P'_c \otimes P'_t)\,\mathrm{CX}\,(P_c \otimes P_t) = \pm \mathrm{CX}$, converting coherent unitary over-rotations around `cx` gates into stochastic Pauli channels prior to ZNE extrapolation under an **identical total shot budget ($N_{\mathrm{total}} = 24,000$ shots per seed)**.
-3. **Pre-Registered $2\text{-}\mathrm{SE}$ Decision Rule:** Damped Harmonic / Lomb–Scargle Spectral ZNE (`LombScargleZNE`) is evaluated against standard baselines (**Local Linear ZNE**, **Quadratic Richardson ZNE**, **Exponential ZNE**, and **Pauli Twirling + Linear/Exponential ZNE**) across $M \ge 20$ random seeds. A spectral niche is confirmed *only if* its mean absolute error (MAE) beats the best standard baseline by at least $2\times$ the combined standard error ($z > +2.0\,\mathrm{SE}$).
-
----
-
-## 2. Empirical Results: Where Spectral ZNE Works vs. Where Pauli Twirling Dominates
-
-### Regime A: 1-Qubit Coherent Idle / Stark-Shift Echo (`H - Id^s - H`, Deep Scales $s \in [1, 17]$, 25 Seeds)
-In a single-qubit Ramsey/echo sequence subject to systematic phase drift $R_Z(\theta = 0.22\text{ rad/layer})$ and depolarizing rate $p = 0.025$ across 8 non-uniform scale factors $s \in \{1, 2, 3, 5, 7, 10, 13, 17\}$ (ideal $\langle Z \rangle = +1.0000$), the expectation curve follows an exact single-frequency damped cosine $E(s) = e^{-\gamma s}\cos(\omega s)$:
-
-| Mitigation Method | Mean Absolute Error ($\mathrm{MAE} \pm \mathrm{SE}$) | Error vs. Unmitigated | Error vs. Global Quadratic ZNE |
-| :--- | :---: | :---: | :---: |
-| **Unmitigated ($s=1$)** | $0.0486 \pm 0.0009$ | Baseline | — |
-| **Global Quadratic ZNE ($s \in [1, 17]$)** | $0.3195 \pm 0.0015$ | $+557\%$ (Diverges) | Baseline |
-| **Local Linear ZNE ($s \in [1, 5]$)** | $0.1215 \pm 0.0015$ | $+150\%$ | $-62.0\%$ |
-| **Exponential ZNE ($s \in [1, 17]$)** | $0.5770 \pm 0.0016$ | $+1087\%$ (Diverges) | $+80.6\%$ |
-| **Damped Harmonic / Lomb–Scargle ZNE** | **$0.0071 \pm 0.0011$** | **$-85.4\%$** | **$-97.8\%$** |
-
-* **Finding (Regime A):** When probing a single coherent oscillation mode over deep scale factors ($s \le 17$, spanning $> 1/2$ period), polynomial and exponential extrapolators fail catastrophically due to sign inversions, whereas **Damped Harmonic / Lomb–Scargle ZNE** accurately locks onto the spectral peak ($\omega \approx 0.22\text{ rad/scale}$) and reduces estimation error to $0.0071 \pm 0.0011$.
+In Version 3.0, the suite directly resolves three core methodological controls in `src/lombscargle_zne.py` and `benchmarks/fair_zne_study.py`:
+1. **Strict Equal-Shot-Budget & Twirl-Only Baselines (`Unmitigated_Equal_Budget`, `Pauli_Twirl_Only_Equal_Budget`):** Compares ZNE against spending the full shot budget ($32{,}768$ in 8-scale 1Q, $24{,}576$ in 6-scale 1Q, $24{,}000$ in 4Q TFIM) on a single unmitigated circuit ($\lambda=1$) or on 12 $\lambda=1$ Pauli-twirled variants, while tracking compiled circuit overhead (`n_circuits_per_seed`: $1$ vs.\ $4$ vs.\ $6$ vs.\ $12$ vs.\ $48$).
+2. **Stability-Gated Auto Selection (`Auto_LombScargle_ZNE`):** `LombScargleZNE._fit_diagnostics` flags `at_bounds` ($2\%$ bound clamping) and `cond_number > 1e4` (`unstable_fit`). `method='auto'` triggers harmonic fitting via $\mathrm{FAP} < 0.05$ or $R^2_{\mathrm{peak}} \ge 0.60$ ($N \le 12$) and rejects unstable fits by falling back to `Local_Linear_ZNE`.
+3. **Out-of-Family 1Q Stress Tests (A1–A4) & Noisy Pauli Twirl Frames (`x,y,z`):** Evaluates short-scale schedules, purely monotonic amplitude+depolarizing damping, bi-chromatic quasi-static Gaussian $1/f$ drift, and 4Q TFIM when inserted Clifford Pauli frame gates carry $p_1 = 10^{-3}$ depolarizing and $R_Z(0.25\epsilon)$ coherent errors.
 
 ---
 
-### Regime B: 4-Qubit Transverse-Field Ising Model (TFIM) Trotter Circuit (3 Steps, 18 `cx` Gates, 20 Seeds)
-We evaluate a 4-qubit entangled TFIM Trotter circuit (Measuring $\langle Z_0 \rangle$, ideal $E_{\mathrm{ideal}} = -0.408093$) across 6 non-uniform fractional folding scales $\lambda \in \{1.000, 1.398, 1.796, 2.294, 2.851, 3.498\}$ under depolarizing noise ($p_1 = 0.001, p_2 = 0.012$) and coherent 2-qubit over-rotations $R_{ZZ}(\epsilon)\cdot R_Z(\epsilon)$ for $\epsilon \in \{0.00, 0.04, 0.08, 0.14\}\text{ rad}$ ($N_{\mathrm{total}} = 24,000$ shots/seed for every method):
+## 2. Empirical Results
 
-| Method ($N_{\mathrm{tot}} = 24\mathrm{k}$ shots) | $\epsilon = 0.00\text{ rad}$ (Depol. Only) | $\epsilon = 0.04\text{ rad}$ (Moderate Coherent) | $\epsilon = 0.08\text{ rad}$ (Strong Coherent) | $\epsilon = 0.14\text{ rad}$ (Extreme Coherent) |
+### Regime A: 1-Qubit Echo Stress Test (A1–A4, 25 Seeds, $E_{\mathrm{ideal}} = +1.0000$)
+
+| Method | A1: Deep Mono-Mode ($s\in\{1..17\}$) | A2: Short Coherent ($s\in\{1..6\}$) | A3: Amp. Damping + Depol. | A4: Bi-Chromatic + $1/f$ Drift |
 | :--- | :---: | :---: | :---: | :---: |
-| **Unmitigated ($\lambda=1$)** | $0.0294 \pm 0.0036$ | $0.1484 \pm 0.0033$ | $0.2898 \pm 0.0032$ | $0.5308 \pm 0.0033$ |
-| **Local Linear ZNE ($\lambda \le 2.29$)** | $0.0195 \pm 0.0029$ | $0.0375 \pm 0.0052$ | $0.0726 \pm 0.0055$ | **$0.0959 \pm 0.0041$** |
-| **Quadratic Richardson ZNE** | $0.0380 \pm 0.0062$ | $0.0952 \pm 0.0097$ | $0.2088 \pm 0.0100$ | $0.2098 \pm 0.0100$ |
-| **Exponential ZNE (Untwirled)** | **$0.0154 \pm 0.0019$** | $0.3601 \pm 0.0172$ | $0.5390 \pm 0.0011$ | $0.7858 \pm 0.0010$ |
-| **Pauli Twirling + Linear ZNE** | $0.0213 \pm 0.0032$ | **$0.0285 \pm 0.0065$** | **$0.0551 \pm 0.0092$** | $0.1211 \pm 0.0169$ |
-| **Pauli Twirling + Exponential ZNE** | $0.0263 \pm 0.0038$ | $0.0292 \pm 0.0047$ | $0.0562 \pm 0.0089$ | $0.1182 \pm 0.0123$ |
-| **Damped Harmonic ZNE (Forced 4-Param)** | $1.3431 \pm 0.1590$ | $2.2868 \pm 0.0000$ | $0.3650 \pm 0.0643$ | $0.5578 \pm 0.0018$ |
-| **Pre-Registered $2\text{-}\mathrm{SE}$ Niche Confirmed?** | **False** ($z = -8.35$) | **False** ($z = -347.2$) | **False** ($z = -4.77$) | **False** ($z = -103.7$) |
+| **Unmitigated (1 scale, 4k shots)** | $0.0491 \pm 0.0011$ | $0.0496 \pm 0.0009$ | $0.0318 \pm 0.0007$ | $0.0892 \pm 0.0014$ |
+| **Unmitigated Equal Budget (1 circ.)** | $0.0482 \pm 0.0004$ | $0.0487 \pm 0.0004$ | $0.0324 \pm 0.0002$ | $0.0904 \pm 0.0009$ |
+| **Global Quadratic ZNE** | $0.3199 \pm 0.0011$ | **$0.0349 \pm 0.0030$** | $0.0046 \pm 0.0006$ | **$0.0387 \pm 0.0062$** |
+| **Local Linear ZNE (4 circ.)** | $0.1197 \pm 0.0018$ | $0.0947 \pm 0.0018$ | $0.0044 \pm 0.0006$ | $0.1667 \pm 0.0041$ |
+| **Exponential ZNE** | $0.5766 \pm 0.0014$ (`inst=0.00`) | $0.2758 \pm 0.0026$ (`inst=0.00`) | **$0.0037 \pm 0.0004$** (`inst=0.00`) | $0.6979 \pm 0.0063$ (`inst=0.00`) |
+| **Damped Harmonic ZNE (Forced)** | **$0.0084 \pm 0.0012$** (`inst=0.00`) | $0.3601 \pm 0.1899$ (`inst=1.00`) | $0.2956 \pm 0.1612$ (`inst=1.00`) | $0.2007 \pm 0.0129$ (`inst=1.00`) |
+| **Auto Lomb–Scargle ZNE** | **$0.0084 \pm 0.0012$** (`osc_sel=1.00`) | $0.0947 \pm 0.0018$ (`osc_sel=0.00`) | $0.0044 \pm 0.0006$ (`osc_sel=0.00`) | $0.1667 \pm 0.0041$ (`osc_sel=0.00`) |
 
-### Key Methodological Conclusions
-1. **Why Pauli Twirling + Linear/Exponential ZNE Wins on Multi-Qubit Circuits:** At moderate-to-strong coherent over-rotations ($\epsilon \in [0.04, 0.08]\text{ rad}$), untwirled Exponential ZNE breaks down ($\mathrm{MAE} = 0.36\text{–}0.54$) because coherent errors violate pure exponential decay. Applying **2-qubit Clifford Pauli Twirling** converts the coherent `cx` over-rotations into an effective depolarizing channel, restoring **Exponential ZNE** ($\mathrm{MAE} = 0.0292\text{–}0.0562$) and **Linear ZNE** ($\mathrm{MAE} = 0.0285\text{–}0.0551$, an **81% error reduction** over unmitigated execution under the exact same 24,000-shot budget).
-2. **Why Forced Damped Harmonic ZNE Fails on Multi-Qubit Short-Scale Schedules:** In an entangled multi-qubit Trotter circuit, coherent gate errors couple multiple non-commuting Pauli pathways rather than producing a single global sinusoid, and standard ZNE schedules ($\lambda \in [1.0, 3.5]$, 6 scale points) span less than half a period, making a 4-parameter damped sinusoid (`e0, gamma, omega, phi`) severely ill-conditioned. Thus, Lomb–Scargle analysis should be used as a **coherent-drift diagnostic tool** on calibration/echo sequences (Regime A), while **Pauli Twirling + Local Linear/Exponential ZNE** should be used for multi-qubit algorithmic mitigation (Regime B).
+* **Finding (Regime A):** Harmonic ZNE beats `Unmitigated_Equal_Budget` decisively **only** in the in-family A1 niche (**$-82.6\%$**, $z = +31.74\,\mathrm{SE}$). Across A2, A3, and A4, forced Harmonic ZNE suffers **$100\%$ optimizer instability**, while `Auto_LombScargle_ZNE` detects instability and falls back cleanly ($0\%$ instability)—matching monotonic mitigation on A3 ($z = +40.47\,\mathrm{SE}$) while documenting that simple local linear fallback loses to `Unmitigated_Equal_Budget` on A2 and A4.
+
+---
+
+### Regime B: 4-Qubit TFIM Trotter Circuit (3 Steps, 18 `cx` Gates, 20 Seeds, 24k Total Shots/Seed)
+
+| Method *(Circuits / Shots)* | $\epsilon = 0.00$ | $\epsilon = 0.04$ | $\epsilon = 0.08$ | $\epsilon = 0.14$ | $\epsilon = 0.08$ **(Noisy Twirl Frames)** |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Unmitigated** ($1$ / $4\mathrm{k}$) | $0.0273 \pm 0.0027$ | $0.1484 \pm 0.0027$ | $0.2872 \pm 0.0032$ | $0.5347 \pm 0.0028$ | $0.2848 \pm 0.0026$ |
+| **Unmitigated Equal Budget** ($1$ / $24\mathrm{k}$) | $0.0265 \pm 0.0014$ | $0.1450 \pm 0.0008$ | $0.2883 \pm 0.0017$ | $0.5322 \pm 0.0011$ | $0.2911 \pm 0.0012$ |
+| **Pauli Twirl Only Eq. Budget** ($12$ / $24\mathrm{k}$) | $0.0259 \pm 0.0013$ | $0.0565 \pm 0.0037$ | $0.0991 \pm 0.0045$ | $0.1554 \pm 0.0084$ | $0.1167 \pm 0.0065$ |
+| **Local Linear ZNE** ($4$ / $16\mathrm{k}$) | $0.0194 \pm 0.0036$ | $0.0407 \pm 0.0051$ | $0.0735 \pm 0.0056$ | $0.1002 \pm 0.0056$ | $0.0817 \pm 0.0063$ |
+| **Quadratic ZNE** ($6$ / $24\mathrm{k}$) | $0.0396 \pm 0.0076$ | $0.1027 \pm 0.0089$ | $0.2086 \pm 0.0101$ | $0.2006 \pm 0.0086$ | $0.2370 \pm 0.0086$ |
+| **Exponential ZNE** ($6$ / $24\mathrm{k}$) | **$0.0156 \pm 0.0027$** | $0.3763 \pm 0.0157$ | $0.5405 \pm 0.0017$ (`1.00`) | $0.7876 \pm 0.0012$ (`1.00`) | $0.5413 \pm 0.0013$ (`1.00`) |
+| **Pauli Twirl + Linear ZNE** ($48$ / $24\mathrm{k}$) | $0.0243 \pm 0.0035$ | **$0.0347 \pm 0.0042$** | $0.0766 \pm 0.0105$ | $0.1212 \pm 0.0158$ | **$0.0383 \pm 0.0070$** |
+| **Pauli Twirl + Exp ZNE** ($48$ / $24\mathrm{k}$) | $0.0307 \pm 0.0047$ | $0.0363 \pm 0.0044$ | **$0.0714 \pm 0.0082$** (`0.25`) | **$0.0997 \pm 0.0136$** (`0.20`) | $0.0406 \pm 0.0069$ |
+| **Damped Harmonic ZNE (Forced)** ($6$ / $24\mathrm{k}$) | $1.2701$ (`inst=1.00`) | $2.2868$ (`inst=1.00`) | $0.3042$ (`inst=1.00`) | $0.5550$ (`inst=1.00`) | $0.2493$ (`inst=1.00`) |
+| **Auto Lomb–Scargle ZNE** ($6$ / $24\mathrm{k}$) | $0.0194 \pm 0.0036$ | $0.0407 \pm 0.0051$ | $0.0735 \pm 0.0056$ | $0.1002 \pm 0.0056$ | $0.0817 \pm 0.0063$ |
+
+* **Finding (Regime B):** Pauli Twirling + Linear/Exp ZNE outperforms `Unmitigated_Equal_Budget` by **$-75.2\%$ to $-81.3\%$** across $\epsilon \in [0.04, 0.14]$ and maintains **$-86.8\%$** ($z = +35.55\,\mathrm{SE}$) when Pauli frame gates (`x, y, z`) themselves incur realistic depolarizing and coherent errors—at the cost of $48$ compiled circuits/seed vs.\ $12$ (`Pauli_Twirl_Only_Equal_Budget`) or $1$ (`Unmitigated_Equal_Budget`).
 
 ---
 
 ## 3. Quickstart & Reproducibility
 
 ```bash
-# Install dependencies
 pip install qiskit qiskit-aer numpy scipy matplotlib pytest
-
-# Run the unit test suite (verifies exact unitary equivalence of integer folding, fractional folding, and Pauli Twirling)
-pytest tests/
-
-# Run the pre-registered head-to-head study (generates results/fair_zne_study.json and results/fair_zne_comparison.png)
+pytest tests/ -v
 python benchmarks/fair_zne_study.py
 ```
-
----
-
-## 4. Repository Structure
-
-```
-qiskit-lombscargle-zne/
-├── src/
-│   ├── lombscargle_zne.py              # Fractional folding, Pauli Twirling & ZNE extrapolators
-│   └── __init__.py
-├── benchmarks/
-│   ├── fair_zne_study.py               # Pre-registered v2.0 1q Echo & 4q TFIM benchmark (20-25 seeds)
-│   ├── run_zne_benchmark.py            # Legacy v1 single-qubit benchmark script
-│   └── benchmark_zne_comparison.png    # Generated v2.0 head-to-head comparison plot
-├── results/
-│   ├── fair_zne_study.json             # Complete numerical benchmark outputs & decision-rule metrics
-│   └── fair_zne_comparison.png         # Publication figure
-├── tests/
-│   └── test_lombscargle_zne.py         # Pytest unit tests (5/5 passing)
-└── README.md
-```
-
----
 
 ## License
 
